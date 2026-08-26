@@ -13,6 +13,6 @@ export const committee = pgTable("committee", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
     role: text("role").notNull(),
-    PhotoUrl: text("photo_url"),
+    photoUrl: text("photo_url"),
     linkedin: text("linkedin"),
 });
