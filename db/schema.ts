@@ -16,8 +16,16 @@ export const committee = pgTable("committee", {
   name: text("name").notNull(),
   role: text("role").notNull(),
   committeeName: text("committee_name"),
+  position: text("position"), // "Head", "Vice Head", or "Member"
   photoUrl: text("photo_url"),
   linkedin: text("linkedin"),
+});
+
+export const committeeTasks = pgTable("committee_tasks", {
+  id: serial("id").primaryKey(),
+  committeeName: text("committee_name").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
 });
 
 export const board = pgTable("board", {

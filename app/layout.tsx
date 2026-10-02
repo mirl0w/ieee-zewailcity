@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import SearchBar from "../components/SearchBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Link href="/events" className="hover:underline font-medium">Events</Link>
           <Link href="/committee" className="hover:underline font-medium">Committee</Link>
           <Link href="/board" className="hover:underline font-medium">Board</Link>
+          <SearchBar />
         </nav>
         {children}
       </body>
