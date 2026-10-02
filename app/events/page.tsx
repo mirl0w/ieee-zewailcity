@@ -1,9 +1,11 @@
 import { db } from "../../db";
 import { events } from "../../db/schema";
 import { addEvent, deleteEvent } from "./actions";
+import { isAdmin } from "../../lib/auth";
 
 export default async function EventsPage() {
   const allEvents = await db.select().from(events);
+  const loggedIn = await isAdmin();
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
@@ -13,69 +15,61 @@ export default async function EventsPage() {
           <li key={event.id} className="p-5 bg-zinc-100 rounded-lg">
             <h2 className="text-xl font-semibold mb-1">{event.title}</h2>
             <p className="text-zinc-600">{event.description}</p>
-            <form action={deleteEvent} className="mt-2 flex gap-2 items-center">
-              <input type="hidden" name="id" value={event.id} />
-              <input
-                type="password"
-                name="password"
-                placeholder="Admin password"
-                required
-                className="px-2 py-1 border border-zinc-300 rounded text-sm"
-              />
-              <button
-                type="submit"
-                className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition"
-              >
-                Delete
-              </button>
-            </form>
+            {loggedIn && (
+              <form action={deleteEvent} className="mt-2 flex gap-2 items-center">
+                <input type="hidden" name="id" value={event.id} />
+                <button
+                  type="submit"
+                  className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition"
+                >
+                  Delete
+                </button>
+              </form>
+            )}
           </li>
         ))}
       </ul>
 
-      <h2 className="text-2xl font-semibold mt-12 mb-4">Add Event</h2>
-      <form action={addEvent} className="flex flex-col gap-3 max-w-sm">
-        <input
-          name="title"
-          placeholder="Event title"
-          required
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <input
-          type="date"
-          name="date"
-          required
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <input
-          name="location"
-          placeholder="Location"
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <input
-          name="registrationLink"
-          placeholder="Registration link (optional)"
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Admin password"
-          required
-          className="px-4 py-2 border border-zinc-300 rounded-lg"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-[#00629B] text-white rounded-lg hover:bg-[#004f7c] transition"
-        >
-          Add Event
-        </button>
-      </form>
+      {loggedIn && (
+        <>
+          <h2 className="text-2xl font-semibold mt-12 mb-4">Add Event</h2>
+          <form action={addEvent} className="flex flex-col gap-3 max-w-sm">
+            <input
+              name="title"
+              placeholder="Event title"
+              required
+              className="px-4 py-2 border border-zinc-300 rounded-lg"
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              className="px-4 py-2 border border-zinc-300 rounded-lg"
+            />
+            <input
+              type="date"
+              name="date"
+              required
+              className="px-4 py-2 border border-zinc-300 rounded-lg"
+            />
+            <input
+              name="location"
+              placeholder="Location"
+              className="px-4 py-2 border border-zinc-300 rounded-lg"
+            />
+            <input
+              name="registrationLink"
+              placeholder="Registration link (optional)"
+              className="px-4 py-2 border border-zinc-300 rounded-lg"
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#00629B] text-white rounded-lg hover:bg-[#004f7c] transition"
+            >
+              Add Event
+            </button>
+          </form>
+        </>
+      )}
     </div>
   );
 }

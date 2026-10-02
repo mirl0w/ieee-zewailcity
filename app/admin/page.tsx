@@ -1,6 +1,7 @@
 import { isAdmin } from "../../lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { logout } from "../../lib/auth";
 
 export default async function AdminPage() {
   const loggedIn = await isAdmin();
@@ -12,6 +13,11 @@ export default async function AdminPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
       <h1 className="text-3xl font-bold text-[#00629B] mb-6">Admin Panel</h1>
+      <form action={logout} className="mb-6">
+        <button type="submit" className="text-sm text-red-600 hover:underline">
+          Log Out
+        </button>
+      </form>
       <p className="text-zinc-600 mb-6">
         You&apos;re logged in. Go manage content:
       </p>

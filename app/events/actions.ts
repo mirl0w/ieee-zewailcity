@@ -2,13 +2,13 @@
 
 import { db } from "../../db";
 import { events } from "../../db/schema";
-import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { isAdmin } from "../../lib/auth";
 
 export async function addEvent(formData: FormData) {
-  const password = formData.get("password") as string;
-  if (password !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Incorrect password");
+  if (!(await isAdmin())) {
+    throw new Error("Not authorized");
   }
 
   const title = formData.get("title") as string;
@@ -28,10 +28,10 @@ export async function addEvent(formData: FormData) {
   revalidatePath("/events");
   revalidatePath("/");
 }
+
 export async function deleteEvent(formData: FormData) {
-  const password = formData.get("password") as string;
-  if (password !== process.env.ADMIN_PASSWORD) {
-    throw new Error("Incorrect password");
+  if (!(await isAdmin())) {
+    throw new Error("Not authorized");
   }
 
   const id = Number(formData.get("id"));
