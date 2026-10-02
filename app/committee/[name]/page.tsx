@@ -2,7 +2,7 @@ import { db } from "../../../db";
 import { committee, committeeTasks } from "../../../db/schema";
 import { eq } from "drizzle-orm";
 import { addMember, addTask } from "../actions";
-import { isAdmin } from "../../../lib/auth";
+import { isCommitteeAdmin } from "../../../lib/auth";
 
 export default async function CommitteeDetailPage({
   params,
@@ -24,7 +24,7 @@ export default async function CommitteeDetailPage({
 
   const head = members.find((m) => m.position === "Head");
   const viceHead = members.find((m) => m.position === "Vice Head");
-  const loggedIn = await isAdmin();
+  const loggedIn = await isCommitteeAdmin();
   const regularMembers = members.filter(
     (m) => m.position !== "Head" && m.position !== "Vice Head"
   );
